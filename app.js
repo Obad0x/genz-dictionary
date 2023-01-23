@@ -1,32 +1,21 @@
-const ejs = require('ejs');
-const axios = require('axios');
-const express = require('express')
+const express = require('express');
 const app = express();
 
+app.get('/', (req, res) => {
 
-app.set('view engine', 'ejs')
+  res.render('index')
+})
 
- app.get('/', console.get)
+app.get('/emoji', (req, res) => {
+  res.render('emoji')
+})
 
-
-
-axios.get('https://emoji-api.com/emojis?search=computer&access_key=1c4c0ffde8b70c09dcd1e312b142f224bbc8b384')
-  .then(function (response) {
-    // handle success
-    const data = response.data ;
-    const emojidata = data.map(item => item.slug)
-    const character = data.map(item => item.character)
+app.post('/emoji', (req, res) => {
 
 
-    app.get ('/', (req,res)=>{})
-    
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-    console.log('failed')
-  })
-  
-app.listen(3000, console.log('the server is live'))
+})
 
 
+app.get('/slangs', (req, res) => {
+  res.render('slangs');
+})
