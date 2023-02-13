@@ -3,6 +3,13 @@ require('dotenv').config()
  const Emojis = require ('./Emojifacts')
  const app = express();
 const port = process.env.PORT;
+const {Configuration, OpenAIApi} = require('openai');
+
+const configuration = new Configuration({
+  apiKey : process.env.API_KEY
+})
+
+const openai = new OpenAIApi(configuration)
 
 app.set('view engine', 'ejs');
 app.set('views', './views')
@@ -50,8 +57,33 @@ return res.status(404).json({
 
 
 
-app.get('slangs', (req, res)=>{
+app.get('/slangs', (req, res)=>{
   res.send('slangs')
+})
+
+app.post('/slangs', (req, res)=>{
+
+      let result;
+      let slang = req.body.slang;
+
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: "",
+        temperature: 0.7,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
+
+      result = response;
+
+      if(result){
+        res.render('he;;p')
+        
+        
+      }
+
 })
 
 
