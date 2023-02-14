@@ -111,7 +111,7 @@ app.get('/slangs', (req, res)=>{
         "logprobs": null,
         
       }
-      ) catch(err){ console.log(err)}
+      ) .catch(err){ console.log(err)}
       
     
           
