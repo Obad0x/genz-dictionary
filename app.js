@@ -98,7 +98,7 @@ app.get('/slangs', (req, res)=>{
 
       // storing the slang in a variable
       let slang = req.body.slang;
-     
+     try{
       // OpenAi api initialization
       const response = await openai.createCompletion({
         "model": "text-davinci-003",
@@ -111,7 +111,7 @@ app.get('/slangs', (req, res)=>{
         "logprobs": null,
         
       }
-      ) .catch(err){ console.log(err)}
+      ) } .catch(err){ console.log(err)}
       
     
           
