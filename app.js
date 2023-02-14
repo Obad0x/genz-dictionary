@@ -4,17 +4,21 @@ require('dotenv').config()
  const app = express();
 const port = process.env.PORT;
 const {Configuration, OpenAIApi} = require('openai');
-
 const configuration = new Configuration({
   apiKey : process.env.API_KEY
 })
 
 const openai = new OpenAIApi(configuration)
 
+
+
+
 app.set('view engine', 'ejs');
 app.set('views', './views')
 app.use(express.static('public'))
 app.use(express.json())
+
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
 
@@ -31,7 +35,7 @@ app.post('/emoji', (req, res) => {
 
 
   // storing the search query  in an emoji variable
-  let emoji = req.body.emoji
+  let emoji = req.body.emoji;
 
   // declared a variable for the result or the output
 
@@ -40,7 +44,7 @@ app.post('/emoji', (req, res) => {
   // using a foreach loop to loop through checking if the emoji eexist
 Emojis.Emojifacts.forEach(element => {
       if(element.emoji === emoji){
-        result = element
+        result = element;
       }
 });
 
@@ -58,32 +62,33 @@ return res.status(404).json({
 
 
 app.get('/slangs', (req, res)=>{
-  res.send('slangs')
+  res.render('slangs', { title : "slangs"})
 })
 
-app.post('/slangs', (req, res)=>{
+ app.post('/slangs', async (req, res)=>{
+  
+  
 
-      let result;
+      
       let slang = req.body.slang;
 
       const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: "",
-        temperature: 0.7,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-      });
-
-      result = response;
-
-      if(result){
-        res.render('he;;p')
-        
+        "model": "text-davinci-003",
+        "prompt":  `what those this slang stand for ${slang}`,
+        "max_tokens": 20,
+        "temperature": 0,
+        "top_p": 1,
+        "n": 1,
+        "stream": false,
+        "logprobs": null,
         
       }
+      )
+      console.log(response.data)
+      return res.render('slangs', { title: "Slang Meaning", slang: slang, result: response });
+ 
 
+      
 })
 
 
