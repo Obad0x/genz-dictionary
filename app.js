@@ -64,7 +64,7 @@ app.post('/emoji',async (req, res) => {
         
  
     
-  }).then( response => {res.render('emoji', {text :response.data.choices[0].text})
+  }).then( response => {res.render('emoji', {text :response.data.choices[0].text, title : "emoji"})
 
                         })
   .catch((err)=>{
