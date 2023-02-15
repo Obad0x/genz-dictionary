@@ -1,6 +1,5 @@
 require('dotenv').config()
- const express = require('express');
- const Emojis = require ('./Emojifacts')
+ const express = require('express')
  const app = express();
 const port = process.env.PORT;
 const {Configuration, OpenAIApi} = require('openai');
@@ -24,10 +23,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
 
-  res.render('index')
+  res.render('index', {
+    title : 'Select an option  below'
+  })
 })
 
-
+app.get('/emojis', (req, res)=>{
+  res.redirect('/emoji').status(302)
+})
 
 
 
@@ -42,31 +45,33 @@ app.get('/emoji', (req, res) => {
 
 
 // POST request searching for the emoji
-app.post('/emoji', (req, res) => {
+app.post('/emoji',async (req, res) => {
 
 
   // storing the search query  in an emoji variable
   let emoji = req.body.emoji;
 
-  // declared a variable for the result or the output
 
-  let result;
+  const response = await openai.createCompletion({
+    "model": "text-davinci-003",
+    "prompt":  `what does this emoji stand for ${emoji}`,
+    "max_tokens": 20,
+    "temperature": 0,
+    "top_p": 1,
+    "n": 1,
+    "stream": false,
+    "logprobs": null,
+        
+ 
+    
+  }).then( response => {res.render('emoji', {text :response.data.choices[0].text})
 
-  // using a foreach loop to loop through checking if the emoji eexist
-Emojis.Emojifacts.forEach(element => {
-      if(element.emoji === emoji){
-        result = element;
-      }
-});
+                        })
+  .catch((err)=>{
+    console.log(err)
+  })
 
-if (result){
-  return res.render('emoji', { title : "emoji" , data : result})
-}
 
-return res.status(404).json({
-  sucess : false, 
-  data : `No data exist for this emoji ${emoji}`
-})
 
 });
 
@@ -137,6 +142,9 @@ app.get('/slangs', (req, res)=>{
 // _____________________________________________________________END ________________________________________
 
 
+app.use((req, res)=>{
+  res.send('404 , this page does not exist').status(404)
+})
  app.listen(port, (req, res)=>{
   console.log(`gen-z dictionary is live on the server on port ${port}`)
 })

@@ -14,8 +14,8 @@
         <button type="submit">send</button>
     </form>
     <br>
-
-    <%= data.name %><br>
-  emoji :    <%= data.Emoji %><br><%= data.meaning %>
+    <% if (typeof text !== 'undefined') { %>
+        <p><%= text %></p>
+      <% } %>
 </body>
 </html>
