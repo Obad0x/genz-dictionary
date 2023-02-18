@@ -54,7 +54,7 @@ app.post('/emoji',async (req, res) => {
 
   const response = await openai.createCompletion({
     "model": "text-davinci-003",
-    "prompt":  `what does this emoji stand for ${emoji}, if it has a special meaning also specify`,
+    "prompt":  `what does this emoji stand for ${emoji}, in slang form or as used by young people when texting `,
     "max_tokens": 45,
     "temperature": 0,
     "top_p": 1,
