@@ -90,7 +90,7 @@ app.post('/emoji',async (req, res) => {
 
 // get request to ge the slang route
 app.get('/slangs', (req, res)=>{
-  res.render('slangs')
+  res.render('slangs', {title : "slang"})
 })
 
 
@@ -117,15 +117,13 @@ app.get('/slangs', (req, res)=>{
             
      
         
-      }).then( response => {res.render('slangs', {text :response.data.choices[0].text})
-    
-                            })
+      }).then( response => {res.render('slangs', {text :response.data.choices[0].text, title : "slang"}) })
       .catch((err)=>{
         console.log(err)
       })
       
 
-      console.log(response.data)
+      
       
       
       
