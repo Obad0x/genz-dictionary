@@ -2,25 +2,25 @@ require('dotenv').config()
  const express = require('express')
  const app = express();
 const port = process.env.PORT;
-const {Configuration, OpenAIApi} = require('openai');
-const configuration = new Configuration({
-  apiKey : process.env.API_KEY
-})
+const emojiRoutes = require('./routes/emojiRoutes');
+const SlangRoutes = require('./routes/slangRoutes')
 const bodyParser = require('body-parser');
-
-const openai = new OpenAIApi(configuration)
-
+// creating new instance of the OpenAIApi routes
 
 
-
+// View enginen
 app.set('view engine', 'ejs');
+// set the views folder
 app.set('views', './views')
+// setting the Public Folder
 app.use(express.static('public'))
+// using express.json to handle incoming request
 app.use(express.json())
+// parsing incoming json object
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.urlencoded({ extended: true }));
-
+// get the / route which is the main route
 app.get('/', (req, res) => {
 
   res.render('index', {
@@ -28,121 +28,21 @@ app.get('/', (req, res) => {
   })
 })
 
-app.get('/emojis', (req, res)=>{
-  res.redirect('/emoji').status(302)
-})
+
+// middleware to get the emoji routes 
+app.use(emojiRoutes);
+
+// middleware to get the emoji routes
+app.use(SlangRoutes);
 
 
-
-
-
-
-
-// _______________________________________________EMOJI ROUTES __________________________________________
-app.get('/emoji', (req, res) => {
-  res.render('emoji', { title : "emoji"})
-})
-
-
-// POST request searching for the emoji
-app.post('/emoji',async (req, res) => {
-
-
-  // storing the search query  in an emoji variable
-  let emoji = req.body.emoji;
-
-
-  const response = await openai.createCompletion({
-    "model": "text-davinci-003",
-    "prompt":  `what does this emoji stand for ${emoji}, if it has a special meaning also specify`,
-    "max_tokens": 45,
-    "temperature": 0,
-    "top_p": 1,
-    "n": 1,
-    "stream": false,
-    "logprobs": null,
-        
- 
-    
-  }).then( response => {res.render('emoji', {text :response.data.choices[0].text, title : "emoji"})
-
-                        })
-  .catch((err)=>{
-    console.log(err)
-  })
-
-
-
-});
-
-
-
-// _________________________________________________END_____________________________________________________
-
-
-
-
-
-
-
-// -----------------------------------------SLANG ROUTES ____________________________________________________________
-
-
-// get request to ge the slang route
-app.get('/slangs', (req, res)=>{
-  res.render('slangs', {title : "slang"})
-})
-
-
-
-
-// post request to get post the data from the slang .ejs to the server
- app.post('/slangs', async (req, res)=>{
-  
-  
-
-      // storing the slang in a variable
-      let slang = req.body.slang;
-     
-      // OpenAi api initialization
-      const response = await openai.createCompletion({
-        "model": "text-davinci-003",
-        "prompt":  `what those this slang stand for ${slang}`,
-        "max_tokens": 20,
-        "temperature": 0,
-        "top_p": 1,
-        "n": 1,
-        "stream": false,
-        "logprobs": null,
-            
-     
-        
-      }).then( response => {res.render('slangs', {text :response.data.choices[0].text, title : "slang"}) })
-      .catch((err)=>{
-        console.log(err)
-      })
-      
-
-      
-      
-      
-      
-    
-      
-          
-       
- 
-
-      
-    })
-
-
-// _____________________________________________________________END ________________________________________
-
-
+// middle ware to handle 404 request
 app.use((req, res)=>{
   res.send('404 , this page does not exist').status(404)
 })
+
+
+// server listening for request on the given PORT
  app.listen(port, (req, res)=>{
   console.log(`gen-z dictionary is live on the server on port ${port}`)
 })
