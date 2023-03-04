@@ -32,3 +32,6 @@ Feel free to raise an issue or a pull request for any improvements or bug fixes.
 
 ## License
 This project is licensed under the terms of the [MIT](https://opensource.org/licenses/MIT) license.
+##Show your support<
+
+Give a ⭐ if you like this and kindly follow for more!
