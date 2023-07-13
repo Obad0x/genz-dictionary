@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 // creating new instance of the OpenAIApi routes
 
 
-// View enginen
+// View engine
 app.set('view engine', 'ejs');
 // set the views folder
 app.set('views', './views')
@@ -48,3 +48,6 @@ app.use((req, res)=>{
 })
 
 console.log(port)
+
+
+//termux test 1  for git [ignore this line ]
